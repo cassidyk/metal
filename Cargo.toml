@@ -1,14 +1,19 @@
 [package]
+authors = ["Lachlan Sneff <lachlan.sneff@gmail.com"]
 name = "metal_os"
 version = "0.1.0"
-authors = ["Lachlan Sneff <lachlan.sneff@gmail.com"]
+
+[dependencies]
+bitflags = "0.9.1"
+multiboot2 = "*"
+once = "0.3.3"
+rlibc = "1.0"
+spin = "*"
+volatile = "0.1.0"
+x86_64 = "0.1.2"
+
+[dependencies.bump_allocator]
+path = "libs/bump_allocator"
 
 [lib]
 crate-type = ["staticlib"]
-
-[dependencies]
-rlibc = "1.0"
-volatile = "0.1.0"
-spin = "*"
-multiboot2 = "*"
-bitflags = "0.9.1"
