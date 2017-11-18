@@ -2,7 +2,7 @@ arch ?= x86_64
 kernel := build/kernel-$(arch).bin
 iso := build/os-$(arch).iso
 
-target ?= $(arch)-metal_os
+target ?= $(arch)-euclid
 rust_os := target/$(target)/release/libmetal_os.a
 
 linker_script := src/arch/$(arch)/linker.ld

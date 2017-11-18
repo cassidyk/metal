@@ -1,0 +1,6 @@
+[package]
+name = "linked_allocator"
+version = "0.1.0"
+authors = ["lsneff"]
+
+[dependencies]
