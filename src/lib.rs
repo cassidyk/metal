@@ -3,6 +3,7 @@
 #![feature(const_unique_new)]
 #![feature(const_fn)]
 #![feature(alloc)]
+#![feature(abi_x86_interrupt)]
 
 #![no_std]
 
@@ -16,6 +17,9 @@ extern crate x86_64;
 #[macro_use]
 extern crate once;
 
+#[macro_use]
+extern crate lazy_static;
+
 extern crate bump_allocator;
 #[macro_use]
 extern crate alloc;
@@ -23,6 +27,7 @@ extern crate alloc;
 #[macro_use]
 mod vga_buffer;
 mod memory;
+mod interrupts;
 
 use memory::FrameAllocator;
 
@@ -40,10 +45,17 @@ pub extern fn rust_main(multiboot_info_addr: usize) {
     enable_write_protect_bit();
 
     unsafe {
+        // Initialize dumb allocator
         bump_allocator::init(HEAP_START, HEAP_SIZE);
     }
 
+    // Initialize memory handling
     memory::init(boot_info);
+
+    // Initialize interrupt handling
+    interrupts::init();
+
+    x86_64::instructions::interrupts::int3();
 
     use alloc::boxed::Box;
     let _heap_test = Box::new(42);

@@ -15,5 +15,9 @@ x86_64 = "0.1.2"
 [dependencies.bump_allocator]
 path = "libs/bump_allocator"
 
+[dependencies.lazy_static]
+version = "0.2.11"
+features = ["spin_no_std"]
+
 [lib]
 crate-type = ["staticlib"]
