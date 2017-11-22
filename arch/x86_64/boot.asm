@@ -1,5 +1,5 @@
 global start
-extern long_mode_start
+extern rust_main
 
 section .text
 bits 32
@@ -22,10 +22,16 @@ start:
 
     lgdt [gdt64.pointer]
 
-    jmp gdt64.code:long_mode_start
+    ; load 0 into all data segment registers
+    mov eax, gdt64.data
+    mov ss, ax
+    mov ds, ax
+    mov es, ax
+    mov fs, ax
+    mov gs, ax
 
-    ; print `OK` to screen
-    mov dword [0xb8000], 0x2f4b2f4f
+    jmp gdt64.code:rust_main
+
     hlt
 
 ; Prints `Err: ` and the given error code to screen and hangs

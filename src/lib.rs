@@ -48,7 +48,7 @@ pub extern fn rust_main(multiboot_info_addr: usize) {
     interrupts::init(&mut mem_ctrl);
 
     unsafe {
-        // int!(33);
+        int!(33);
     }
 
     println!("fin");
