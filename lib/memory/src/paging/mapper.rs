@@ -2,7 +2,7 @@
 use super::{VirtualAddress, PhysicalAddress, Page, ENTRY_COUNT};
 use super::entry::*;
 use super::table::{self, Table, Level4};
-use memory::{PAGE_SIZE, Frame, FrameAllocator};
+use super::{PAGE_SIZE, Frame, FrameAllocator};
 use core::ptr::Unique;
 
 pub struct Mapper {
@@ -128,6 +128,6 @@ impl Mapper {
         tlb::flush(VirtualAddress(page.start_address()));
 
         // TODO: free p(1, 2, 3) table if empty
-        // allocator.deallocate_frame(frame);
+        allocator.deallocate_frame(frame);
     }
 }

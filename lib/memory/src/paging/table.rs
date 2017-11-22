@@ -1,6 +1,5 @@
-use memory::paging::entry::*;
-use memory::paging::ENTRY_COUNT;
-use memory::FrameAllocator;
+use super::entry::*;
+use super::{FrameAllocator, ENTRY_COUNT};
 
 use core::ops::{Index, IndexMut};
 use core::marker::PhantomData;

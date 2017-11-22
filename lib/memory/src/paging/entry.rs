@@ -1,4 +1,4 @@
-use memory::Frame;
+use super::Frame;
 use multiboot2::ElfSection;
 
 bitflags! {

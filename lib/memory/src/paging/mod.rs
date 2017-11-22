@@ -1,4 +1,4 @@
-use memory::{PAGE_SIZE, Frame, FrameAllocator};
+use super::{PAGE_SIZE, Frame, FrameAllocator};
 pub use self::entry::*;
 use self::temporary_page::TemporaryPage;
 use self::mapper::Mapper;
@@ -8,7 +8,7 @@ mod table;
 mod temporary_page;
 mod mapper;
 
-use core::ops::{Deref, DerefMut};
+use core::ops::{Deref, DerefMut, Add};
 use multiboot2::BootInformation;
 
 const ENTRY_COUNT: usize = 512;
@@ -29,7 +29,7 @@ impl Page {
         }
     }
 
-    fn start_address(&self) -> usize {
+    pub fn start_address(&self) -> usize {
         self.number * PAGE_SIZE
     }
 
@@ -57,6 +57,17 @@ impl Page {
     }
 }
 
+impl Add<usize> for Page {
+    type Output = Page;
+
+    fn add(self, rhs: usize) -> Page {
+        Page {
+            number: self.number + rhs,
+        }
+    }
+}
+
+#[derive(Copy, Clone, Debug)]
 pub struct PageIter {
     start: Page,
     end: Page,
@@ -203,7 +214,7 @@ pub fn remap_the_kernel<A>(allocator: &mut A, boot_info: &BootInformation)
             assert!(section.start_address() % PAGE_SIZE == 0,
                 "Sections need to be page aligned");
             
-            println!("Mapping section at addr: {:#x}, size: {:#x}", section.addr, section.size);
+            // println!("Mapping section at addr: {:#x}, size: {:#x}", section.addr, section.size);
 
             let flags = EntryFlags::from(section);
 

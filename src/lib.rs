@@ -1,15 +1,8 @@
 #![feature(lang_items)]
-#![feature(unique)]
-#![feature(const_unique_new)]
-#![feature(const_fn)]
-#![feature(alloc)]
-#![feature(abi_x86_interrupt)]
 
 #![no_std]
 
 // External crates
-#[macro_use] extern crate bitflags;
-#[macro_use] extern crate once;
 extern crate x86_64;
 extern crate rlibc;
 extern crate multiboot2;
@@ -18,8 +11,7 @@ extern crate multiboot2;
 #[macro_use] extern crate vga;
 extern crate bump_allocator;
 extern crate interrupts;
-
-mod memory;
+extern crate memory;
 
 pub const HEAP_START: usize = 0o_000_001_000_000_0000;
 pub const HEAP_SIZE: usize = 100 * 1024; // 100 KiB
@@ -40,10 +32,10 @@ pub extern fn rust_main(multiboot_info_addr: usize) {
     }
 
     // Initialize memory handling
-    memory::init(boot_info);
+    let mut mem_ctrl = memory::init(boot_info, HEAP_START, HEAP_SIZE);
 
     // Initialize interrupt handling
-    interrupts::init();
+    interrupts::init(&mut mem_ctrl);
 
     println!("fin");
     loop {}

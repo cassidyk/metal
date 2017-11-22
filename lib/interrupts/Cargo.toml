@@ -9,3 +9,4 @@ lazy_static = { version = "0.2.11", features = ["spin_no_std"] }
 
 # internal crates
 vga = { path = "../vga" }
+memory = { path = "../memory" }

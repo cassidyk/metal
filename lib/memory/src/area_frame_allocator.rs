@@ -1,4 +1,4 @@
-use memory::{Frame, FrameAllocator};
+use super::{Frame, FrameAllocator};
 use multiboot2::{MemoryAreaIter, MemoryArea};
 
 pub struct AreaFrameAllocator {
@@ -86,6 +86,6 @@ impl FrameAllocator for AreaFrameAllocator {
     }
 
     fn deallocate_frame(&mut self, frame: Frame) {
-        unimplemented!()
+        // Does nothing
     }
 }

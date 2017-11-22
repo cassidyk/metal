@@ -1,7 +1,6 @@
 
-use super::{ActivePageTable, VirtualAddress, Page};
+use super::{ActivePageTable, VirtualAddress, Page, Frame, FrameAllocator};
 use super::table::{Table, Level1};
-use memory::{Frame, FrameAllocator};
 
 pub struct TemporaryPage {
     page: Page,
@@ -70,9 +69,12 @@ impl FrameAllocator for TinyAllocator {
     /// Searches for empty spot and puts `Frame` there
     fn deallocate_frame(&mut self, frame: Frame) {
         for frame_option in &mut self.0 {
-            if frame_option.is_none() {
-                *frame_option = Some(frame);
-                return;
+            match *frame_option {
+                Some(_) => {},
+                None => {
+                    *frame_option = Some(frame);
+                    return;
+                }
             }
         }
         panic!("`TinyAllocator` can hold only 3 frames");
