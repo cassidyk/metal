@@ -10,7 +10,6 @@
 // External crates
 #[macro_use] extern crate bitflags;
 #[macro_use] extern crate once;
-#[macro_use] extern crate alloc;
 extern crate x86_64;
 extern crate rlibc;
 extern crate multiboot2;

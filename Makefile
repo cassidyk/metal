@@ -5,10 +5,10 @@ iso := build/os-$(arch).iso
 target ?= $(arch)-euclid
 rust_os := target/$(target)/release/libmetal_os.a
 
-linker_script := src/arch/$(arch)/linker.ld
-grub_cfg := src/arch/$(arch)/grub.cfg
-asm_src := $(wildcard src/arch/$(arch)/*.asm)
-asm_obj := $(patsubst src/arch/$(arch)/%.asm, build/arch/$(arch)/%.o, $(asm_src))
+linker_script := arch/$(arch)/linker.ld
+grub_cfg := arch/$(arch)/grub.cfg
+asm_src := $(wildcard arch/$(arch)/*.asm)
+asm_obj := $(patsubst arch/$(arch)/%.asm, build/arch/$(arch)/%.o, $(asm_src))
 
 .PHONY: all clean run iso kernel
 
@@ -37,6 +37,6 @@ kernel:
 	@xargo build --release --target $(target)
 
 # compile assembly files
-build/arch/$(arch)/%.o: src/arch/$(arch)/%.asm
+build/arch/$(arch)/%.o: arch/$(arch)/%.asm
 	@mkdir -p $(shell dirname $@)
 	@nasm -f elf64 $< -o $@
