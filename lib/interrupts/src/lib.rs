@@ -1,3 +1,10 @@
+#![no_std]
+
+#![feature(abi_x86_interrupt)]
+
+#[macro_use] extern crate vga;
+#[macro_use] extern crate lazy_static;
+extern crate x86_64;
 
 use x86_64::structures::idt::{Idt, ExceptionStackFrame};
 

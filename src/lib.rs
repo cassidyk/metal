@@ -7,29 +7,20 @@
 
 #![no_std]
 
-extern crate volatile;
-extern crate rlibc;
-extern crate spin;
-extern crate multiboot2;
-#[macro_use]
-extern crate bitflags;
+// External crates
+#[macro_use] extern crate bitflags;
+#[macro_use] extern crate once;
+#[macro_use] extern crate alloc;
 extern crate x86_64;
-#[macro_use]
-extern crate once;
+extern crate rlibc;
+extern crate multiboot2;
 
-#[macro_use]
-extern crate lazy_static;
-
+// Internal crates      
+#[macro_use] extern crate vga;
 extern crate bump_allocator;
-#[macro_use]
-extern crate alloc;
+extern crate interrupts;
 
-#[macro_use]
-mod vga_buffer;
 mod memory;
-mod interrupts;
-
-use memory::FrameAllocator;
 
 pub const HEAP_START: usize = 0o_000_001_000_000_0000;
 pub const HEAP_SIZE: usize = 100 * 1024; // 100 KiB
@@ -54,11 +45,6 @@ pub extern fn rust_main(multiboot_info_addr: usize) {
 
     // Initialize interrupt handling
     interrupts::init();
-
-    x86_64::instructions::interrupts::int3();
-
-    use alloc::boxed::Box;
-    let _heap_test = Box::new(42);
 
     println!("fin");
     loop {}

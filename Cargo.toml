@@ -1,5 +1,5 @@
 [package]
-authors = ["Lachlan Sneff <lachlan.sneff@gmail.com"]
+authors = ["Lachlan Sneff <lachlan.sneff@gmail.com>"]
 name = "metal_os"
 version = "0.1.0"
 
@@ -8,16 +8,13 @@ bitflags = "0.9.1"
 multiboot2 = "*"
 once = "0.3.3"
 rlibc = "1.0"
-spin = "*"
-volatile = "0.1.0"
 x86_64 = "0.1.2"
 
-[dependencies.bump_allocator]
-path = "libs/bump_allocator"
+# internal library crates
+bump_allocator = { path = "lib/bump_allocator" }
+vga = { path = "lib/vga" }
+interrupts = { path = "lib/interrupts" }
 
-[dependencies.lazy_static]
-version = "0.2.11"
-features = ["spin_no_std"]
 
 [lib]
 crate-type = ["staticlib"]
