@@ -2,8 +2,7 @@ arch ?= x86_64
 kernel := build/kernel-$(arch).bin
 iso := build/os-$(arch).iso
 
-target ?= $(arch)-euclid
-rust_os := target/$(target)/release/libmetal_os.a
+target ?= $(arch)-metal
 
 linker_script := arch/$(arch)/linker.ld
 grub_cfg := arch/$(arch)/grub.cfg

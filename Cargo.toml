@@ -1,6 +1,6 @@
 [package]
 authors = ["Lachlan Sneff <lachlan.sneff@gmail.com>"]
-name = "metal_os"
+name = "Metal"
 version = "0.1.0"
 
 [dependencies]
