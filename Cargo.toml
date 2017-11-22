@@ -4,9 +4,9 @@ name = "metal"
 version = "0.1.0"
 
 [dependencies]
+x86_64 = "0.1.2"
 multiboot2 = "*"
 rlibc = "1.0"
-x86_64 = "0.1.2"
 
 # internal library crates
 bump_allocator = { path = "lib/bump_allocator" }

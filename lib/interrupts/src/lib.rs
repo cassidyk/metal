@@ -5,6 +5,7 @@
 #[macro_use] extern crate vga;
 #[macro_use] extern crate lazy_static;
 #[macro_use] extern crate bitflags;
+extern crate io;
 extern crate memory;
 extern crate x86_64;
 extern crate bit_field;
@@ -19,6 +20,9 @@ pub const DOUBLE_FAULT_IST_INDEX: usize = 0;
 
 mod idt;
 mod gdt;
+mod pic;
+
+pub use pic::remap as pic_remap;
 
 static TSS: Once<TaskStateSegment> = Once::new();
 static GDT: Once<gdt::Gdt> = Once::new();
@@ -60,4 +64,5 @@ pub fn init(mem_controller: &mut MemoryController) {
     }
 
     idt::IDT.load();
+    
 }
