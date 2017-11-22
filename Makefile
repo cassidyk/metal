@@ -6,6 +6,7 @@ target ?= $(arch)-metal
 
 linker_script := arch/$(arch)/linker.ld
 grub_cfg := arch/$(arch)/grub.cfg
+rust_os := target/$(target)/release/libMetal.a
 asm_src := $(wildcard arch/$(arch)/*.asm)
 asm_obj := $(patsubst arch/$(arch)/%.asm, build/arch/$(arch)/%.o, $(asm_src))
 
