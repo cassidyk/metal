@@ -4,37 +4,60 @@
 
 #[macro_use] extern crate vga;
 #[macro_use] extern crate lazy_static;
+#[macro_use] extern crate bitflags;
 extern crate memory;
 extern crate x86_64;
-
-use x86_64::structures::idt::{Idt, ExceptionStackFrame};
+extern crate bit_field;
+extern crate spin;
 
 use memory::MemoryController;
+use x86_64::structures::tss::TaskStateSegment;
+use x86_64::VirtualAddress;
+use spin::Once;
 
-/// Interrupt handling
+pub const DOUBLE_FAULT_IST_INDEX: usize = 0;
 
-lazy_static! {
-    static ref IDT: Idt = {
-        let mut idt = Idt::new();
-        idt.breakpoint.set_handler_fn(breakpoint_handler);
-        // idt.double_fault.set_handler_addr(double_fault_handler);
-        // return `idt`
-        idt
-    };
-}
+mod idt;
+mod gdt;
+
+static TSS: Once<TaskStateSegment> = Once::new();
+static GDT: Once<gdt::Gdt> = Once::new();
 
 pub fn init(mem_controller: &mut MemoryController) {
+    use x86_64::structures::gdt::SegmentSelector;
+    use x86_64::instructions::segmentation::set_cs;
+    use x86_64::instructions::tables::load_tss;
+
     let double_fault_stack = mem_controller.alloc_stack(1)
         .expect("could not allocate double-fault stack");
 
-    IDT.load();
-}
+    let tss = TSS.call_once(|| {
+        let mut tss = TaskStateSegment::new();
+        tss.interrupt_stack_table[idt::DOUBLE_FAULT_IST_INDEX] = VirtualAddress(
+            double_fault_stack.top()
+        );
+        tss
+    });
 
-extern "x86-interrupt" fn breakpoint_handler(stack_frame: &mut ExceptionStackFrame) {
-    println!("EXCEPTION: BREAKPOINT\n{:#?}", stack_frame);
-}
+    let mut code_selector = SegmentSelector(0);
+    let mut tss_selector = SegmentSelector(0);
 
-extern "x86-interrupt" fn double_fault_handler(stack_frame: &mut ExceptionStackFrame, error_code: u64) {
-    println!("EXCEPTION: DOUBLE FAULT ({:#x})\n{:#?}", error_code, stack_frame);
-    loop {}
+    let gdt = GDT.call_once(|| {
+        let mut gdt = gdt::Gdt::new();
+        code_selector = gdt.add_entry(gdt::Descriptor::kernel_code_segment());
+        tss_selector = gdt.add_entry(gdt::Descriptor::tss_segment(&tss));
+
+        gdt
+    });
+
+    gdt.load();
+
+    unsafe {
+        // reload code segment register
+        set_cs(code_selector);
+        // load TSS
+        load_tss(tss_selector);
+    }
+
+    idt::IDT.load();
 }
