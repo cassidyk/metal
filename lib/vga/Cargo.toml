@@ -1,0 +1,8 @@
+[package]
+name = "vga"
+version = "0.1.0"
+authors = ["lsneff"]
+
+[dependencies]
+spin = "*"
+volatile = "0.1.0"
