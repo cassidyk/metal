@@ -2,7 +2,7 @@ use x86_64::instructions::port::*;
 
 use core::marker::PhantomData;
 
-trait InOut {
+pub trait InOut {
     unsafe fn port_in(port: u16) -> Self;
     unsafe fn port_out(port: u16, value: Self);
 }

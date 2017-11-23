@@ -21,8 +21,8 @@ impl Gdt {
         use core::mem::size_of;
 
         let ptr = DescriptorTablePointer {
-            base: self.table.as_ptr() as u64,
             limit: (self.table.len() * size_of::<u64>() - 1) as u16,
+            base: self.table.as_ptr() as u64,
         };
 
         unsafe {
@@ -66,6 +66,11 @@ impl Descriptor {
         Descriptor::UserSegment(flags.bits())
     }
 
+    pub fn kernel_data_segment() -> Descriptor {
+        let flags = DescriptorFlags::USER_SEGMENT | DescriptorFlags::PRESENT | DescriptorFlags::READ_WRITE;
+        Descriptor::UserSegment(flags.bits())
+    }
+
     pub fn tss_segment(tss: &'static TaskStateSegment) -> Descriptor {
         use core::mem::size_of;
         use bit_field::BitField;
@@ -90,6 +95,7 @@ impl Descriptor {
 
 bitflags! {
     struct DescriptorFlags: u64 {
+        const READ_WRITE    = 1 << 41;
         const CONFORMING    = 1 << 42;
         const EXECUTABLE    = 1 << 43;
         const USER_SEGMENT  = 1 << 44;

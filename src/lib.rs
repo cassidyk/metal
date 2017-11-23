@@ -2,10 +2,9 @@
 #![no_std]
 
 #![feature(lang_items)]
-#![feature(asm)]
 
 // External crates
-#[macro_use] extern crate x86_64;
+extern crate x86_64;
 extern crate rlibc;
 extern crate multiboot2;
 
@@ -17,10 +16,6 @@ extern crate memory;
 
 pub const HEAP_START: usize = 0o_000_001_000_000_0000;
 pub const HEAP_SIZE: usize = 100 * 1024; // 100 KiB
-
-// new interrupt vector offsets for remapped PICs
-const PIC1_VECTOR_OFFSET: u8 = 0x20;
-const PIC2_VECTOR_OFFSET: u8 = 0x28;
 
 
 #[no_mangle]
@@ -41,15 +36,11 @@ pub extern fn rust_main(multiboot_info_addr: usize) {
     let mut mem_ctrl = memory::init(boot_info, HEAP_START, HEAP_SIZE);
     
     unsafe {
-        interrupts::pic_remap(PIC1_VECTOR_OFFSET, PIC2_VECTOR_OFFSET);
+        interrupts::pic_remap();
     }
 
     // Initialize interrupt handling
     interrupts::init(&mut mem_ctrl);
-
-    unsafe {
-        int!(33);
-    }
 
     println!("fin");
     loop {}

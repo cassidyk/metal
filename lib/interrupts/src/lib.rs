@@ -45,10 +45,12 @@ pub fn init(mem_controller: &mut MemoryController) {
 
     let mut code_selector = SegmentSelector(0);
     let mut tss_selector = SegmentSelector(0);
+    let mut data_selector = SegmentSelector(0);
 
     let gdt = GDT.call_once(|| {
         let mut gdt = gdt::Gdt::new();
         code_selector = gdt.add_entry(gdt::Descriptor::kernel_code_segment());
+        data_selector = gdt.add_entry(gdt::Descriptor::kernel_data_segment());
         tss_selector = gdt.add_entry(gdt::Descriptor::tss_segment(&tss));
 
         gdt
@@ -64,5 +66,4 @@ pub fn init(mem_controller: &mut MemoryController) {
     }
 
     idt::IDT.load();
-    
 }

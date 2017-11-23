@@ -12,9 +12,13 @@ lazy_static! {
             idt.double_fault.set_handler_fn(double_fault_handler)
                 .set_stack_index(DOUBLE_FAULT_IST_INDEX as u16);
         }
-        
-        idt.interrupts[33].set_handler_fn(keyboard_interrupt_handler);
 
+        for i in 0..224 {
+            idt.interrupts[i].set_handler_fn(general_purpose_interrupt_stub);
+        }
+
+        idt.interrupts[1].set_handler_fn(keyboard_interrupt_handler);
+        
         // return `idt`
         idt
     };
@@ -28,11 +32,20 @@ extern "x86-interrupt" fn breakpoint_handler(stack_frame: &mut ExceptionStackFra
     println!("EXCEPTION: BREAKPOINT\n{:#?}", stack_frame);
 }
 
+extern "x86-interrupt" fn invalid_tss_handler(stack_frame: &mut ExceptionStackFrame, error_code: u64) {
+    println!("EXCEPTION: INVALID TSS ({:#x})\n{:#?}", error_code, stack_frame);
+    loop {}
+}
+
 extern "x86-interrupt" fn double_fault_handler(stack_frame: &mut ExceptionStackFrame, error_code: u64) {
     println!("EXCEPTION: DOUBLE FAULT ({:#x})\n{:#?}", error_code, stack_frame);
     loop {}
 }
 
+extern "x86-interrupt" fn general_purpose_interrupt_stub(_stack_frame: &mut ExceptionStackFrame) {
+    println!("An interrupt happened");
+}
+
 extern "x86-interrupt" fn keyboard_interrupt_handler(_stack_frame: &mut ExceptionStackFrame) {
-    println!("KEYBOARD INTERRUPT");
+    println!("KEYBOARD INTERRUPT\n{:#?}", _stack_frame);
 }
