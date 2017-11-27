@@ -66,4 +66,8 @@ pub fn init(mem_controller: &mut MemoryController) {
     }
 
     idt::IDT.load();
+
+    unsafe {
+        x86_64::instructions::interrupts::enable();
+    }
 }

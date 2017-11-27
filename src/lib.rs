@@ -2,11 +2,16 @@
 #![no_std]
 
 #![feature(lang_items)]
+#![feature(asm)]
+#![feature(global_allocator)]
+#![feature(allocator_api)]
+#![feature(alloc)]
 
 // External crates
-extern crate x86_64;
+#[macro_use] extern crate x86_64;
 extern crate rlibc;
 extern crate multiboot2;
+#[macro_use] extern crate alloc;
 
 // Internal crates      
 #[macro_use] extern crate vga;
@@ -16,6 +21,8 @@ extern crate memory;
 
 pub const HEAP_START: usize = 0o_000_001_000_000_0000;
 pub const HEAP_SIZE: usize = 100 * 1024; // 100 KiB
+
+// use alloc::vec::Vec;
 
 
 #[no_mangle]
@@ -42,7 +49,9 @@ pub extern fn rust_main(multiboot_info_addr: usize) {
     // Initialize interrupt handling
     interrupts::init(&mut mem_ctrl);
 
-    println!("fin");
+    
+
+    println!("kernel initialized");
     loop {}
 }
 

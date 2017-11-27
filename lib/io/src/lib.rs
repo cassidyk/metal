@@ -7,4 +7,4 @@ extern crate x86_64;
 
 mod port;
 
-pub use port::{Port, PortPair};
+pub use port::{Port, PortPair, port_in, port_out};

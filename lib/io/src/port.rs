@@ -34,6 +34,18 @@ impl InOut for u32 {
     }
 }
 
+pub unsafe fn port_out<T>(port: u16, value: T)
+    where T: InOut
+{
+    T::port_out(port, value);
+}
+
+pub unsafe fn port_in<T>(port: u16) -> T
+    where T: InOut
+{
+    T::port_in(port)
+}
+
 pub struct Port<T> {
     port: u16,
     _phantom: PhantomData<T>,
