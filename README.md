@@ -5,6 +5,8 @@ By moving all code execution into the kernel (to avoid the overhead of interrupt
 
 An overhead look of how Metal will work is located [here](IDEAS.md)
 
+The irc channel is [#MetalOS](https://webchat.freenode.net/#MetalOS) on freenode.
+
 ## Booting
 
 ### Preinstall
