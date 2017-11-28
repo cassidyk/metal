@@ -8,10 +8,10 @@
 #![feature(alloc)]
 
 // External crates
-#[macro_use] extern crate x86_64;
+extern crate x86_64;
 extern crate rlibc;
 extern crate multiboot2;
-#[macro_use] extern crate alloc;
+extern crate alloc;
 
 // Internal crates      
 #[macro_use] extern crate vga;
