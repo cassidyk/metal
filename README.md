@@ -1,4 +1,6 @@
 # Metal
+
+[![Join the chat at https://gitter.im/metal-os/Lobby](https://badges.gitter.im/metal-os/Lobby.svg)](https://gitter.im/metal-os/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 A reimagining of the modern OS
 
 By moving all code execution into the kernel (to avoid the overhead of interrupts) and only allowing WebAssembly to be executed, Metal will probably be fast and secure.
