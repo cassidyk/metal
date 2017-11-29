@@ -6,7 +6,11 @@ A reimagining of the modern OS
 
 By moving all code execution into the kernel (to avoid the overhead of interrupts) and only allowing WebAssembly to be executed, Metal will probably be fast and secure.
 
+![](http://www.lsneff.me/images/architecture.png)
+
 An overhead look of how Metal will work is located [here](IDEAS.md)
+
+I won't be taking any pull-requests at the moment because **metal OS** will be undergoing very signifigant refactoring and refocusing.
 
 ## Booting
 
