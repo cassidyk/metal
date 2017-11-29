@@ -1,4 +1,4 @@
 [submodule "kernel"]
-    path = kernel
-    url = "https://github.com/metal-os/kernel.git"
+	path = kernel
+	url = https://github.com/metal-os/kernel
 
